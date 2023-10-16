@@ -4,16 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-    <groupId>com.ruoyi</groupId>
-    <artifactId>ruoyi</artifactId>
-    <version>3.8.6</version>
+    <groupId>com.rc</groupId>
+    <artifactId>xyz-framework</artifactId>
+    <version>1.0.0</version>
 
-    <name>ruoyi</name>
-    <url>http://www.ruoyi.vip</url>
-    <description>若依管理系统</description>
-    
+    <name>xyz-framework</name>
+
     <properties>
-        <ruoyi.version>3.8.6</ruoyi.version>
+        <ruoyi.version>1.0.0</ruoyi.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -21,6 +19,7 @@
         <druid.version>1.2.16</druid.version>
         <bitwalker.version>1.21</bitwalker.version>
         <swagger.version>3.0.0</swagger.version>
+        <knife4j-spring-boot-starter.version>2.0.9</knife4j-spring-boot-starter.version>
         <kaptcha.version>2.3.3</kaptcha.version>
         <pagehelper.boot.version>1.4.6</pagehelper.boot.version>
         <fastjson.version>2.0.39</fastjson.version>
@@ -31,6 +30,15 @@
         <velocity.version>2.3</velocity.version>
         <jwt.version>0.9.1</jwt.version>
     </properties>
+
+    <!-- 全局生效的依赖 -->
+    <dependencies>
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
 
     <!-- 依赖声明 -->
     <dependencyManagement>
@@ -86,6 +94,13 @@
                 </exclusions>
             </dependency>
 
+            <!-- knife4j-->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j-spring-boot-starter.version}</version>
+            </dependency>
+
             <!-- io常用工具类 -->
             <dependency>
                 <groupId>commons-io</groupId>
@@ -135,38 +150,31 @@
                 <version>${kaptcha.version}</version>
             </dependency>
 
-            <!-- 定时任务-->
-            <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-quartz</artifactId>
-                <version>${ruoyi.version}</version>
-            </dependency>
-
-            <!-- 代码生成-->
-            <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-generator</artifactId>
-                <version>${ruoyi.version}</version>
-            </dependency>
-
             <!-- 核心模块-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-framework</artifactId>
+                <groupId>com.rc</groupId>
+                <artifactId>ruice-framework</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
             <!-- 系统模块-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-system</artifactId>
+                <groupId>com.rc</groupId>
+                <artifactId>ruice-system</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
             <!-- 通用工具-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-common</artifactId>
+                <groupId>com.rc</groupId>
+                <artifactId>ruice-common</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
+            <!-- 业务模块-->
+            <dependency>
+                <groupId>com.rc</groupId>
+                <artifactId>ruice-biz</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
@@ -174,12 +182,11 @@
     </dependencyManagement>
 
     <modules>
-        <module>ruoyi-admin</module>
-        <module>ruoyi-framework</module>
-        <module>ruoyi-system</module>
-        <module>ruoyi-quartz</module>
-        <module>ruoyi-generator</module>
-        <module>ruoyi-common</module>
+        <module>ruice-admin</module>
+        <module>ruice-framework</module>
+        <module>ruice-system</module>
+        <module>ruice-common</module>
+        <module>ruice-biz</module>
     </modules>
     <packaging>pom</packaging>
 
