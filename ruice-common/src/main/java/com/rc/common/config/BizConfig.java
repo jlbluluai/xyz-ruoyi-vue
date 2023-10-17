@@ -18,12 +18,6 @@ public class BizConfig
     /** 版本 */
     private String version;
 
-    /** 版权年份 */
-    private String copyrightYear;
-
-    /** 实例演示开关 */
-    private boolean demoEnabled;
-
     /** 上传路径 */
     private static String profile;
 
@@ -51,26 +45,6 @@ public class BizConfig
     public void setVersion(String version)
     {
         this.version = version;
-    }
-
-    public String getCopyrightYear()
-    {
-        return copyrightYear;
-    }
-
-    public void setCopyrightYear(String copyrightYear)
-    {
-        this.copyrightYear = copyrightYear;
-    }
-
-    public boolean isDemoEnabled()
-    {
-        return demoEnabled;
-    }
-
-    public void setDemoEnabled(boolean demoEnabled)
-    {
-        this.demoEnabled = demoEnabled;
     }
 
     public static String getProfile()

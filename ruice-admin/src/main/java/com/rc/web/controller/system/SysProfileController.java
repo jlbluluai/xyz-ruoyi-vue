@@ -1,7 +1,7 @@
 package com.rc.web.controller.system;
 
 import com.rc.common.annotation.Log;
-import com.rc.common.config.RuoYiConfig;
+import com.rc.common.config.BizConfig;
 import com.rc.common.core.controller.BaseController;
 import com.rc.common.core.domain.AjaxResult;
 import com.rc.common.core.domain.entity.SysUser;
@@ -14,20 +14,21 @@ import com.rc.common.utils.file.MimeTypeUtils;
 import com.rc.framework.web.service.TokenService;
 import com.rc.system.service.ISysUserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 个人信息 业务处理
- * 
+ *
  * @author ruoyi
  */
-@Api("系统-个人信息")
+@Api(value = "系统-个人信息", tags = "系统-个人信息")
 @RestController
 @RequestMapping("/system/user/profile")
-public class SysProfileController extends BaseController
-{
+public class SysProfileController extends BaseController {
+
     @Autowired
     private ISysUserService userService;
 
@@ -37,9 +38,9 @@ public class SysProfileController extends BaseController
     /**
      * 个人信息
      */
+    @ApiOperation(value = "个人信息")
     @GetMapping
-    public AjaxResult profile()
-    {
+    public AjaxResult profile() {
         LoginUser loginUser = getLoginUser();
         SysUser user = loginUser.getUser();
         AjaxResult ajax = AjaxResult.success(user);
@@ -51,26 +52,23 @@ public class SysProfileController extends BaseController
     /**
      * 修改用户
      */
+    @ApiOperation(value = "修改用户")
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult updateProfile(@RequestBody SysUser user)
-    {
+    public AjaxResult updateProfile(@RequestBody SysUser user) {
         LoginUser loginUser = getLoginUser();
         SysUser currentUser = loginUser.getUser();
         currentUser.setNickName(user.getNickName());
         currentUser.setEmail(user.getEmail());
         currentUser.setPhonenumber(user.getPhonenumber());
         currentUser.setSex(user.getSex());
-        if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(currentUser))
-        {
+        if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(currentUser)) {
             return error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
-        if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(currentUser))
-        {
+        if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(currentUser)) {
             return error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
-        if (userService.updateUserProfile(currentUser) > 0)
-        {
+        if (userService.updateUserProfile(currentUser) > 0) {
             // 更新缓存用户信息
             tokenService.setLoginUser(loginUser);
             return success();
@@ -81,23 +79,20 @@ public class SysProfileController extends BaseController
     /**
      * 重置密码
      */
+    @ApiOperation(value = "重置密码")
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PutMapping("/updatePwd")
-    public AjaxResult updatePwd(String oldPassword, String newPassword)
-    {
+    public AjaxResult updatePwd(String oldPassword, String newPassword) {
         LoginUser loginUser = getLoginUser();
         String userName = loginUser.getUsername();
         String password = loginUser.getPassword();
-        if (!SecurityUtils.matchesPassword(oldPassword, password))
-        {
+        if (!SecurityUtils.matchesPassword(oldPassword, password)) {
             return error("修改密码失败，旧密码错误");
         }
-        if (SecurityUtils.matchesPassword(newPassword, password))
-        {
+        if (SecurityUtils.matchesPassword(newPassword, password)) {
             return error("新密码不能与旧密码相同");
         }
-        if (userService.resetUserPwd(userName, SecurityUtils.encryptPassword(newPassword)) > 0)
-        {
+        if (userService.resetUserPwd(userName, SecurityUtils.encryptPassword(newPassword)) > 0) {
             // 更新缓存用户密码
             loginUser.getUser().setPassword(SecurityUtils.encryptPassword(newPassword));
             tokenService.setLoginUser(loginUser);
@@ -109,16 +104,14 @@ public class SysProfileController extends BaseController
     /**
      * 头像上传
      */
+    @ApiOperation(value = "头像上传")
     @Log(title = "用户头像", businessType = BusinessType.UPDATE)
     @PostMapping("/avatar")
-    public AjaxResult avatar(@RequestParam("avatarfile") MultipartFile file) throws Exception
-    {
-        if (!file.isEmpty())
-        {
+    public AjaxResult avatar(@RequestParam("avatarfile") MultipartFile file) throws Exception {
+        if (!file.isEmpty()) {
             LoginUser loginUser = getLoginUser();
-            String avatar = FileUploadUtils.upload(RuoYiConfig.getAvatarPath(), file, MimeTypeUtils.IMAGE_EXTENSION);
-            if (userService.updateUserAvatar(loginUser.getUsername(), avatar))
-            {
+            String avatar = FileUploadUtils.upload(BizConfig.getAvatarPath(), file, MimeTypeUtils.IMAGE_EXTENSION);
+            if (userService.updateUserAvatar(loginUser.getUsername(), avatar)) {
                 AjaxResult ajax = AjaxResult.success();
                 ajax.put("imgUrl", avatar);
                 // 更新缓存用户头像
